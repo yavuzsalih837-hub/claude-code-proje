@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agent Tracking Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">AgentOS</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active"><span>▦</span> Dashboard</a>
+        <a href="#" class="nav-item"><span>◈</span> Agents</a>
+        <a href="#" class="nav-item"><span>≡</span> Tasks</a>
+        <a href="#" class="nav-item"><span>◉</span> Logs</a>
+        <a href="#" class="nav-item"><span>⚙</span> Settings</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar">JD</div>
+          <div>
+            <div class="user-name">John Doe</div>
+            <div class="user-role">Admin</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <!-- Header -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1 class="page-title">Agent Dashboard</h1>
+          <span class="page-sub" id="live-time"></span>
+        </div>
+        <div class="topbar-right">
+          <button class="btn-icon" id="btn-add-agent" title="Add Agent">+</button>
+          <div class="notif-bell">
+            <span>🔔</span>
+            <span class="notif-badge" id="notif-count">0</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Total Agents</div>
+          <div class="stat-value" id="stat-total">0</div>
+          <div class="stat-delta up" id="stat-total-d"></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Active</div>
+          <div class="stat-value green" id="stat-active">0</div>
+          <div class="stat-bar"><div class="stat-bar-fill green" id="bar-active"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Waiting</div>
+          <div class="stat-value yellow" id="stat-waiting">0</div>
+          <div class="stat-bar"><div class="stat-bar-fill yellow" id="bar-waiting"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Error</div>
+          <div class="stat-value red" id="stat-error">0</div>
+          <div class="stat-bar"><div class="stat-bar-fill red" id="bar-error"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Tasks Done</div>
+          <div class="stat-value" id="stat-done">0</div>
+          <div class="stat-delta up" id="stat-done-d"></div>
+        </div>
+      </div>
+
+      <!-- Content grid -->
+      <div class="content-grid">
+        <!-- Agent list -->
+        <section class="panel agents-panel">
+          <div class="panel-header">
+            <span class="panel-title">Agents</span>
+            <div class="filter-tabs">
+              <button class="ftab active" data-filter="all">All</button>
+              <button class="ftab" data-filter="active">Active</button>
+              <button class="ftab" data-filter="waiting">Waiting</button>
+              <button class="ftab" data-filter="error">Error</button>
+            </div>
+          </div>
+          <div class="agent-list" id="agent-list"></div>
+        </section>
+
+        <!-- Right col -->
+        <div class="right-col">
+          <!-- Activity feed -->
+          <section class="panel feed-panel">
+            <div class="panel-header">
+              <span class="panel-title">Live Activity</span>
+              <span class="live-dot"><span class="pulse"></span>LIVE</span>
+            </div>
+            <div class="feed" id="feed"></div>
+          </section>
+
+          <!-- Mini chart -->
+          <section class="panel chart-panel">
+            <div class="panel-header">
+              <span class="panel-title">Task Throughput</span>
+              <span class="chart-sub">Last 10 ticks</span>
+            </div>
+            <div class="chart-area">
+              <canvas id="chart" width="340" height="100"></canvas>
+            </div>
+          </section>
+
+          <!-- Import JSON Update -->
+          <section class="panel import-panel">
+            <div class="panel-header">
+              <span class="panel-title">Import JSON Update</span>
+            </div>
+            <div class="import-body">
+              <textarea id="import-json" class="import-textarea" placeholder='[{"agentId":"a1","agentName":"Alpha-01","projectName":"Proj","taskName":"Task","stage":"Running","status":"active","progress":42,"notes":"...","updatedAt":"2026-01-01T00:00:00Z"}]'></textarea>
+              <button class="btn-apply" id="btn-apply-json">Apply Update</button>
+              <div class="import-status" id="import-status"></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Agent Detail Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="modal">
+      <button class="modal-close" id="modal-close">✕</button>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
