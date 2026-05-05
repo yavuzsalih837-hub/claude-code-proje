@@ -5,6 +5,11 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(__dirname));
+
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
+});
 
 const REQUIRED_FIELDS = ['agentId', 'agentName', 'task', 'status'];
 const VALID_STATUSES = ['idle', 'in-progress', 'blocked', 'done', 'failed', 'running', 'active', 'waiting', 'error'];
