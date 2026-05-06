@@ -55,6 +55,7 @@ let feed = [];
 let tasksDone = 0;
 let throughputHistory = new Array(10).fill(0);
 let currentFilter = 'all';
+let currentSearchTerm = '';
 let notifCount = 0;
 let tickTasksDone = 0;
 let backendActive = false;
@@ -189,15 +190,23 @@ const error = agents.filter(a => normalizeStatus(a.status) === 'error').length;
 function renderAgents() {
   const list = document.getElementById('agent-list');
   const filtered = currentFilter === 'all'
-  ? agents
-  : agents.filter(a => normalizeStatus(a.status) === currentFilter);
+    ? agents
+    : agents.filter(a => normalizeStatus(a.status) === currentFilter);
 
-  if (filtered.length === 0) {
+  const displayed = currentSearchTerm
+    ? filtered.filter(a =>
+        a.name.toLowerCase().includes(currentSearchTerm) ||
+        a.task.toLowerCase().includes(currentSearchTerm) ||
+        a.type.toLowerCase().includes(currentSearchTerm)
+      )
+    : filtered;
+
+  if (displayed.length === 0) {
     list.innerHTML = `<div style="text-align:center;padding:40px;color:var(--muted);font-size:0.85rem;">No agents match this filter.</div>`;
     return;
   }
 
-  list.innerHTML = filtered.map(a => `
+  list.innerHTML = displayed.map(a => `
     <div class="agent-card" data-id="${a.id}">
       <div class="agent-avatar" style="background:${STATUS_COLORS[normalizeStatus(a.status)]}22">
   ${a.emoji}
@@ -439,6 +448,12 @@ document.querySelectorAll('.ftab').forEach(btn => {
   });
 });
 
+// ── SEARCH ────────────────────────────────────────────────────────────────────
+document.getElementById('agent-search').addEventListener('input', e => {
+  currentSearchTerm = e.target.value.toLowerCase();
+  renderAgents();
+});
+
 // ── ADD AGENT ─────────────────────────────────────────────────────────────────
 document.getElementById('btn-add-agent').addEventListener('click', () => {
   const newId = agents.length ? Math.max(...agents.map(a => a.id)) + 1 : 1;
@@ -449,6 +464,13 @@ document.getElementById('btn-add-agent').addEventListener('click', () => {
   pushFeed('active', `was deployed`, a.name);
   renderStats();
   renderAgents();
+  postToBackend([{
+    agentId: a.id,
+    agentName: a.name,
+    task: a.task,
+    status: a.status,
+    progress: a.progress,
+  }]);
 });
 
 // ── JSON IMPORT ───────────────────────────────────────────────────────────────

@@ -120,3 +120,23 @@ Files changed: <list>
 Checks run: <lint / tests / build — pass/fail>
 Notes: <anything notable>
 ```
+
+---
+
+## Slash Commands
+
+Each agent can be triggered directly in Claude Code via a slash command.
+These commands are defined in `.claude/commands/` (not yet created — pending approval).
+
+| Command | Agent | When to use |
+|---------|-------|-------------|
+| `/plan` | Planner Agent | Start here for every task — scope, risks, test strategy |
+| `/frontend` | Frontend Agent | UI changes, styles, client-side logic |
+| `/backend` | Backend Agent | API routes, server.js, server-side logic |
+| `/n8n` | n8n Automation Agent | Workflows, webhooks, integrations |
+| `/test` | Tester Agent | Test plans, execution, coverage |
+| `/debug` | Debug Agent | Root cause analysis, error tracing, fixes |
+
+**Usage:** type `/plan <task description>` to activate the Planner Agent, or `/debug <error description>` to activate the Debug Agent, etc.
+
+**Note:** slash commands require `.claude/commands/` files to be created first. Until then, refer to the Agent Roster above and invoke agents by name in your prompt.

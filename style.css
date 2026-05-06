@@ -30,6 +30,7 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
   border-right: 1px solid var(--border);
   display: flex; flex-direction: column;
   padding: 24px 0;
+  position: relative; z-index: 10;
 }
 
 .sidebar-logo {
@@ -66,7 +67,7 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
 .user-role { font-size: 0.75rem; color: var(--muted); }
 
 /* MAIN */
-.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.main { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden; }
 
 /* TOPBAR */
 .topbar {
@@ -127,7 +128,7 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
 .content-grid {
   display: grid; grid-template-columns: 1fr 340px;
   gap: 16px; padding: 0 28px 28px;
-  flex: 1; overflow: hidden; min-height: 0;
+  flex: 1; overflow: hidden; min-height: 0; min-width: 0;
 }
 
 /* PANEL */
@@ -145,6 +146,17 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
 
 .panel-title { font-weight: 700; font-size: 0.92rem; }
 
+/* SEARCH INPUT */
+.agent-search {
+  flex: 1; max-width: 180px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 6px; padding: 4px 10px;
+  color: var(--text); font-size: 0.78rem; outline: none;
+  transition: border-color 0.15s;
+}
+.agent-search::placeholder { color: var(--muted); }
+.agent-search:focus { border-color: var(--accent); }
+
 /* FILTER TABS */
 .filter-tabs { display: flex; gap: 4px; }
 .ftab {
@@ -157,7 +169,7 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
 
 /* AGENT LIST */
 .agents-panel { overflow: hidden; }
-.agent-list { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.agent-list { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
 
 .agent-card {
   background: var(--bg3); border: 1px solid var(--border);
@@ -166,7 +178,7 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
   display: flex; align-items: flex-start; gap: 12px;
 }
 
-.agent-card:hover { border-color: var(--accent); transform: translateX(2px); }
+.agent-card:hover { border-color: var(--accent); margin-left: 2px; margin-right: -2px; }
 
 .agent-avatar {
   width: 38px; height: 38px; border-radius: 10px;
