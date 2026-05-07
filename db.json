@@ -1,0 +1,88 @@
+{
+  "agents": [
+    {
+      "agentId": "movprjbrjt20",
+      "agentName": "Phase1-Test",
+      "type": "LLM Agent",
+      "description": "",
+      "systemPrompt": "Updated prompt: be concise.",
+      "status": "idle",
+      "progress": 0,
+      "notes": "",
+      "createdAt": "2026-05-07T16:41:52.791Z",
+      "updatedAt": "2026-05-07T16:41:53.090Z"
+    }
+  ],
+  "tasks": [
+    {
+      "taskId": "movprjhwgq70",
+      "agentId": "movprjbrjt20",
+      "title": "Read paper A",
+      "description": "foo",
+      "status": "done",
+      "progress": 100,
+      "createdAt": "2026-05-07T16:41:53.012Z",
+      "assignedAt": "2026-05-07T21:06:23.128Z",
+      "startedAt": "2026-05-07T21:06:23.173Z",
+      "completedAt": "2026-05-07T21:06:23.222Z",
+      "logs": [
+        {
+          "time": "2026-05-07T16:41:53.012Z",
+          "message": "Task created"
+        },
+        {
+          "time": "2026-05-07T21:06:23.128Z",
+          "message": "Status → assigned"
+        },
+        {
+          "time": "2026-05-07T21:06:23.173Z",
+          "message": "Status → running"
+        },
+        {
+          "time": "2026-05-07T21:06:23.222Z",
+          "message": "Status → done"
+        }
+      ]
+    },
+    {
+      "taskId": "movprjizjnsh",
+      "agentId": "movprjbrjt20",
+      "title": "Read paper B",
+      "description": "",
+      "status": "running",
+      "progress": 0,
+      "createdAt": "2026-05-07T16:41:53.051Z",
+      "assignedAt": null,
+      "startedAt": "2026-05-07T21:06:23.353Z",
+      "completedAt": null,
+      "logs": [
+        {
+          "time": "2026-05-07T16:41:53.052Z",
+          "message": "Task created"
+        },
+        {
+          "time": "2026-05-07T21:06:23.353Z",
+          "message": "Status → running"
+        }
+      ]
+    },
+    {
+      "taskId": "movprjk2e119",
+      "agentId": "movprjbrjt20",
+      "title": "Read paper C",
+      "description": "",
+      "status": "pending",
+      "progress": 0,
+      "createdAt": "2026-05-07T16:41:53.090Z",
+      "assignedAt": null,
+      "startedAt": null,
+      "completedAt": null,
+      "logs": [
+        {
+          "time": "2026-05-07T16:41:53.090Z",
+          "message": "Task created"
+        }
+      ]
+    }
+  ]
+}

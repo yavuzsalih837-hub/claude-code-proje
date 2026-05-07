@@ -36,6 +36,12 @@ function now() {
 // ── LEGACY /update (backward compatible — CLAUDE.md schema) ──────────────────
 const LEGACY_REQUIRED = ['agentId', 'agentName', 'task', 'status'];
 const VALID_STATUSES  = ['idle', 'in-progress', 'blocked', 'done', 'failed', 'running', 'active', 'waiting', 'error'];
+const VALID_TASK_STATUSES = ['pending', 'assigned', 'running', 'done', 'failed'];
+
+function normalizeTaskStatus(s) {
+  if (s === 'active' || s === 'in-progress') return 'running';
+  return s;
+}
 
 app.post('/update', (req, res) => {
   const data = req.body;
@@ -79,19 +85,20 @@ app.get('/agents', (req, res) => res.json(db.agents));
 
 // ── POST /agents ───────────────────────────────────────────────────────────────
 app.post('/agents', (req, res) => {
-  const { agentName, type, description } = req.body;
+  const { agentName, type, description, systemPrompt } = req.body;
   if (!agentName) return res.status(400).json({ error: 'agentName required' });
 
   const agent = {
-    agentId:     newId(),
+    agentId:      newId(),
     agentName,
-    type:        type        || 'LLM Agent',
-    description: description || '',
-    status:      'idle',
-    progress:    0,
-    notes:       '',
-    createdAt:   now(),
-    updatedAt:   now(),
+    type:         type         || 'LLM Agent',
+    description:  description  || '',
+    systemPrompt: systemPrompt || '',
+    status:       'idle',
+    progress:     0,
+    notes:        '',
+    createdAt:    now(),
+    updatedAt:    now(),
   };
 
   db.agents.push(agent);
@@ -111,7 +118,7 @@ app.patch('/agents/:id', (req, res) => {
   const agent = db.agents.find(a => a.agentId === req.params.id);
   if (!agent) return res.status(404).json({ error: 'Agent not found' });
 
-  const allowed = ['agentName', 'type', 'description', 'status', 'progress', 'notes'];
+  const allowed = ['agentName', 'type', 'description', 'systemPrompt', 'status', 'progress', 'notes'];
   for (const field of allowed) {
     if (req.body[field] !== undefined) agent[field] = req.body[field];
   }
@@ -148,6 +155,7 @@ app.post('/agents/:id/tasks', (req, res) => {
     status:      'pending',
     progress:    0,
     createdAt:   now(),
+    assignedAt:  null,
     startedAt:   null,
     completedAt: null,
     logs:        [{ time: now(), message: 'Task created' }],
@@ -155,8 +163,6 @@ app.post('/agents/:id/tasks', (req, res) => {
 
   db.tasks.push(task);
 
-  agent.status    = 'active';
-  agent.progress  = 0;
   agent.updatedAt = now();
 
   saveDb();
@@ -178,12 +184,18 @@ app.patch('/agents/:id/tasks/:taskId', (req, res) => {
   );
   if (!task) return res.status(404).json({ error: 'Task not found' });
 
-  const { status, progress } = req.body;
+  const { status: rawStatus, progress } = req.body;
 
-  if (status !== undefined) {
+  if (rawStatus !== undefined) {
+    const status = normalizeTaskStatus(rawStatus);
+    if (!VALID_TASK_STATUSES.includes(status)) {
+      return res.status(400).json({ error: 'Invalid task status', valid: VALID_TASK_STATUSES });
+    }
     task.status = status;
-    if (status === 'active'  && !task.startedAt)   task.startedAt   = now();
-    if (status === 'done' || status === 'failed')   task.completedAt = now();
+    if (status === 'assigned' && !task.assignedAt)  task.assignedAt  = now();
+    if (status === 'running'  && !task.startedAt)   task.startedAt   = now();
+    if ((status === 'done' || status === 'failed') && !task.completedAt) task.completedAt = now();
+    if (status === 'done') task.progress = 100;
     task.logs.push({ time: now(), message: `Status → ${status}` });
   }
 
