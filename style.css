@@ -319,6 +319,175 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
 .import-status.success { color: var(--green); }
 .import-status.error { color: var(--red); }
 
+/* MODAL FORMS (create agent / task assign) */
+.modal-form-header {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 22px;
+}
+.modal-form-icon {
+  width: 46px; height: 46px; border-radius: 12px;
+  background: var(--accent); color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; font-weight: 700;
+}
+.modal-form-title { font-size: 1.15rem; font-weight: 800; }
+.modal-form-sub   { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+.modal-form { display: flex; flex-direction: column; gap: 6px; }
+.modal-form-inline {
+  display: flex; flex-direction: column; gap: 8px;
+  background: var(--bg3); border-radius: 10px; padding: 12px;
+}
+
+.form-label {
+  font-size: 0.72rem; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.6px;
+  margin-top: 8px; margin-bottom: 2px; font-weight: 600;
+}
+.form-label .req { color: var(--red); margin-left: 2px; }
+
+.form-input {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text);
+  font-family: inherit; font-size: 0.86rem;
+  padding: 9px 12px; outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+.form-input:focus { border-color: var(--accent); }
+.form-input::placeholder { color: var(--muted); }
+textarea.form-input { resize: vertical; min-height: 60px; line-height: 1.45; }
+select.form-input { cursor: pointer; appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+                    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 30px;
+}
+.form-input-sm { padding: 4px 24px 4px 8px; font-size: 0.75rem; width: auto; }
+
+.form-actions {
+  display: flex; justify-content: flex-end; gap: 8px;
+  margin-top: 18px; padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.btn-primary {
+  background: var(--accent); color: white; border: none;
+  padding: 9px 18px; border-radius: 8px;
+  font-size: 0.85rem; font-weight: 600; cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btn-primary:hover { opacity: 0.85; }
+.btn-secondary {
+  background: var(--bg3); color: var(--text);
+  border: 1px solid var(--border);
+  padding: 9px 18px; border-radius: 8px;
+  font-size: 0.85rem; font-weight: 600; cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-secondary:hover { background: var(--bg); }
+.btn-danger {
+  background: var(--red-dim); color: var(--red);
+  border: 1px solid rgba(239,68,68,0.3);
+  padding: 6px 12px; border-radius: 8px;
+  font-size: 0.78rem; font-weight: 600; cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-danger:hover { background: rgba(239,68,68,0.25); }
+.btn-small { padding: 6px 12px; font-size: 0.78rem; align-self: flex-start; }
+
+/* TASK PILL ON AGENT CARD */
+.agent-task-pill {
+  display: inline-block;
+  background: var(--blue-dim); color: var(--blue);
+  font-size: 0.65rem; font-weight: 700;
+  padding: 1px 7px; border-radius: 10px;
+  margin-left: 6px; vertical-align: middle;
+}
+
+/* TASK LIST IN MODAL */
+.task-list-real { display: flex; flex-direction: column; gap: 8px; }
+.task-empty {
+  text-align: center; padding: 18px;
+  background: var(--bg3); border-radius: 8px;
+  color: var(--muted); font-size: 0.82rem;
+}
+
+.task-card-real {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.tcr-header {
+  display: flex; align-items: center; gap: 8px;
+}
+.tcr-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.tcr-title {
+  flex: 1; font-weight: 600; font-size: 0.88rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.tcr-delete {
+  background: transparent; border: none; color: var(--muted);
+  cursor: pointer; font-size: 0.85rem; padding: 2px 6px;
+  border-radius: 4px; transition: background 0.15s, color 0.15s;
+}
+.tcr-delete:hover { background: var(--red-dim); color: var(--red); }
+
+.tcr-desc {
+  font-size: 0.8rem; color: var(--muted);
+  line-height: 1.45; padding-left: 16px;
+}
+.tcr-meta {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  font-size: 0.7rem; color: var(--muted);
+  padding-left: 16px;
+}
+
+.tcr-logs { padding-left: 16px; margin-top: 4px; }
+.tcr-logs summary {
+  cursor: pointer; font-size: 0.75rem; color: var(--muted);
+  padding: 4px 0; user-select: none;
+  list-style: none;
+}
+.tcr-logs summary::-webkit-details-marker { display: none; }
+.tcr-logs summary::before { content: '▸ '; transition: transform 0.15s; display: inline-block; }
+.tcr-logs[open] summary::before { content: '▾ '; }
+.tcr-logs[open] summary { color: var(--text); }
+
+.tcr-log-list {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 8px 10px;
+  max-height: 160px; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 3px;
+  margin-top: 6px;
+  font-family: 'Cascadia Code', 'Consolas', monospace;
+  font-size: 0.72rem; line-height: 1.6;
+}
+.tcr-log-line { display: flex; gap: 8px; }
+.tcr-log-line .log-time {
+  color: var(--muted); flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.tcr-log-line .log-msg { color: var(--text); word-break: break-word; }
+
+.tcr-log-form {
+  display: flex; gap: 6px; margin-top: 6px;
+}
+.tcr-log-form input {
+  flex: 1;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 6px; color: var(--text);
+  font-size: 0.78rem; padding: 6px 10px; outline: none;
+  font-family: inherit;
+}
+.tcr-log-form input:focus { border-color: var(--accent); }
+.tcr-log-form button {
+  background: var(--accent); color: white; border: none;
+  border-radius: 6px; padding: 6px 12px;
+  font-size: 0.74rem; font-weight: 600; cursor: pointer;
+}
+.tcr-log-form button:hover { opacity: 0.85; }
+
 /* SCROLLBAR */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
