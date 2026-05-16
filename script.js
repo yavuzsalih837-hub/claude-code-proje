@@ -1,3 +1,20 @@
+const eventSource = new EventSource('http://localhost:3000/events');
+
+eventSource.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+
+  if (data.agents) {
+    agents = data.agents;
+  }
+
+  if (data.tasks) {
+    tasks = data.tasks;
+  }
+
+  renderAgents();
+};
+
+
 'use strict';
 
 // Fix: re-define window.fetch as configurable/writable so environments that

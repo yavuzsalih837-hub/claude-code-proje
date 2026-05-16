@@ -1,3 +1,4 @@
+
 'use strict';
 
 const express = require('express');
@@ -19,10 +20,29 @@ function saveDb() {
 }
 
 let db = loadDb();
-
+const sseClients = [];
 // ── MIDDLEWARE ────────────────────────────────────────────────────────────────
 app.use(cors());
 app.use(express.json());
+app.get('/events', (req, res) => {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+
+  const payload = JSON.stringify(db);
+
+  res.write(`data: ${payload}\n\n`);
+
+  sseClients.push(res);
+
+  req.on('close', () => {
+    const index = sseClients.indexOf(res);
+    if (index !== -1) {
+      sseClients.splice(index, 1);
+    }
+  });
+});
+
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 function newId() {
@@ -32,7 +52,13 @@ function newId() {
 function now() {
   return new Date().toISOString();
 }
+function broadcastUpdate() {
+  const payload = `data: ${JSON.stringify(db)}\n\n`;
 
+  sseClients.forEach(client => {
+    client.write(payload);
+  });
+}
 // ── LEGACY /update (backward compatible — CLAUDE.md schema) ──────────────────
 const LEGACY_REQUIRED = ['agentId', 'agentName', 'task', 'status'];
 const VALID_STATUSES  = ['idle', 'in-progress', 'blocked', 'done', 'failed', 'running', 'active', 'waiting', 'error'];
@@ -77,6 +103,7 @@ app.post('/update', (req, res) => {
   }
 
   saveDb();
+  broadcastUpdate();
   res.json({ success: true, agent: db.agents.find(a => a.agentId === agentId) });
 });
 
